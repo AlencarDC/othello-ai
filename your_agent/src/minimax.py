@@ -1,5 +1,5 @@
 import your_agent.src.board_utils as board_utils
-from your_agent.src.heuristics import edges_heuristic, mobility_heuristic, score_heuristic, corner_heuristic
+from your_agent.src.heuristics import mobility_heuristic, parity_heuristic, score_difference_heuristic, corners_heuristic
 from board import Board
 
 
@@ -8,7 +8,12 @@ class MinimaxSolver(object):
     pass
 
   def heuristic(self, board: Board, color):
-    return 4*corner_heuristic(board, color) + 4*edges_heuristic(board, color) + 1*mobility_heuristic(board, color) + score_heuristic(board, color)
+    if board_utils.is_early_game(board):
+      return 1024 * corners_heuristic(board, color) + 64 * mobility_heuristic(board, color)
+    elif board_utils.is_mid_game(board):
+      return 1024 * corners_heuristic(board, color) + 128 * parity_heuristic(board, color) + 32 * mobility_heuristic(board, color) + 16 * score_difference_heuristic(board, color)
+    else:
+      return 1024 * corners_heuristic(board, color) + 512 * parity_heuristic(board, color) + 512 * score_difference_heuristic(board, color) + 128 * mobility_heuristic(board, color)
   
   def minimax(self, board, color, depth=0):
     _, max_move = self.maxvalue(board, color, depth)
