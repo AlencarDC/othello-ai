@@ -2,3 +2,5 @@ history.txt
 results.xml
 
 __pycache__
+
+_agent*
