@@ -67,6 +67,37 @@ def edges_heuristic(board: Board, player_color):
   return (player_edges - opponent_edges) / (player_edges + opponent_edges + 1)
 
 
+def next_to_corners_heuristic(board: Board, player_color):
+  opponent_color = board.opponent(player_color)
+  player_next_corners = 0
+  opponent_next_corners = 0
+  if (board.tiles[0][1] == player_color or board.tiles[1][0] == player_color or board.tiles[1][1] == player_color) and board.tiles[0][0] == board.EMPTY:
+    player_next_corners += 1
+
+  if (board.tiles[7][1] == player_color or board.tiles[6][0] == player_color or board.tiles[6][1] == player_color) and board.tiles[7][0] == board.EMPTY:
+    player_next_corners += 1
+    
+  if (board.tiles[1][7] == player_color or board.tiles[0][6] == player_color or board.tiles[1][6] == player_color) and board.tiles[0][7] == board.EMPTY:
+    player_next_corners += 1
+  
+  if (board.tiles[7][6] == player_color or board.tiles[6][7] == player_color or board.tiles[6][6] == player_color) and board.tiles[7][7] == board.EMPTY:
+    player_next_corners += 1
+
+  if (board.tiles[0][1] == opponent_color or board.tiles[1][0] == opponent_color or board.tiles[1][1] == opponent_color) and board.tiles[0][0] == board.EMPTY:
+    opponent_next_corners += 1
+
+  if (board.tiles[7][1] == opponent_color or board.tiles[6][0] == opponent_color or board.tiles[6][1] == opponent_color) and board.tiles[7][0] == board.EMPTY:
+    opponent_next_corners += 1
+    
+  if (board.tiles[1][7] == opponent_color or board.tiles[0][6] == opponent_color or board.tiles[1][6] == opponent_color) and board.tiles[0][7] == board.EMPTY:
+    opponent_next_corners += 1
+  
+  if (board.tiles[7][6] == opponent_color or board.tiles[6][7] == opponent_color or board.tiles[6][6] == opponent_color) and board.tiles[7][7] == board.EMPTY:
+    opponent_next_corners += 1
+  
+  return (opponent_next_corners - player_next_corners) / (opponent_next_corners + player_next_corners + 1)
+  
+
 def parity_heuristic(board: Board, color):
   score = board.piece_count[color]
   

@@ -1,5 +1,5 @@
 import your_agent.src.board_utils as board_utils
-from your_agent.src.heuristics import mobility_heuristic, parity_heuristic, score_difference_heuristic, corners_heuristic
+from your_agent.src.heuristics import mobility_heuristic, next_to_corners_heuristic, parity_heuristic, score_difference_heuristic, corners_heuristic
 from board import Board
 
 
@@ -9,15 +9,17 @@ class MinimaxSolver(object):
 
   def heuristic(self, board: Board, color):
     if board_utils.is_early_game(board):
-      return 1024 * corners_heuristic(board, color) + 64 * mobility_heuristic(board, color)
+      return 1536 * corners_heuristic(board, color) + 384 * next_to_corners_heuristic(board, color) + 64 * mobility_heuristic(board, color)
     elif board_utils.is_mid_game(board):
-      return 1024 * corners_heuristic(board, color) + 128 * parity_heuristic(board, color) + 32 * mobility_heuristic(board, color) + 16 * score_difference_heuristic(board, color)
+      return 1536 * corners_heuristic(board, color) + 384 * next_to_corners_heuristic(board, color) + 128 * parity_heuristic(board, color) + 32 * mobility_heuristic(board, color) + 16 * score_difference_heuristic(board, color)
     else:
-      return 1024 * corners_heuristic(board, color) + 512 * parity_heuristic(board, color) + 512 * score_difference_heuristic(board, color) + 128 * mobility_heuristic(board, color)
+      return 1536 * corners_heuristic(board, color) + 512 * next_to_corners_heuristic(board, color) + 512 * parity_heuristic(board, color) + 512 * score_difference_heuristic(board, color) + 128 * mobility_heuristic(board, color)
+  
   
   def minimax(self, board, color, depth=0):
     _, max_move = self.maxvalue(board, color, depth)
     return max_move
+  
   
   def maxvalue(self, board: Board, color, depth=0, alpha=float('-inf'), beta=float('inf')):
     if depth == 0 or board.is_terminal_state():
@@ -42,9 +44,8 @@ class MinimaxSolver(object):
       return (self.heuristic(board, color), None)
     
     return (value, legal_moves[best_move_index])
-    
-      
-  
+
+
   def minvalue(self, board: Board, color, depth=0, alpha=float('-inf'), beta=float('inf')):
     if depth == 0 or board.is_terminal_state():
       return (self.heuristic(board, color), None)
@@ -68,3 +69,4 @@ class MinimaxSolver(object):
       return (self.heuristic(board, color), None)
     
     return (value, legal_moves[best_move_index])
+

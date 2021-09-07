@@ -7,6 +7,7 @@ def get_next_board(board: Board, move, color):
   new_board.process_move(move, color)
   return new_board
 
+
 def board_size(board: Board): 
   return len(board.tiles) * len(board.tiles[0])
 
@@ -44,3 +45,4 @@ def is_mid_game(board: Board):
 
 def is_end_game(board: Board):
   return game_phase(board) == END_GAME
+
